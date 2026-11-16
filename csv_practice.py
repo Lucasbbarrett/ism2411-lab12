@@ -18,3 +18,29 @@ with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
     for row in reader:
         print(row)
 # The prices and quantities are still strings here.
+
+# Exercise 3: Save and skip the header.
+print("\nHeader and data rows:")
+with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.reader(file)
+    header = next(reader)
+    print("Header:", header)
+    for row in reader:
+        print(row)
+
+# Exercise 4: Convert the numbers and calculate revenue.
+print("\nRevenue by order:")
+total_revenue = 0
+original_count = 0
+with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.reader(file)
+    next(reader)
+    for row in reader:
+        product = row[0]
+        price = float(row[1])
+        quantity = int(row[2])
+        total = round(price * quantity, 2)
+        total_revenue += total
+        original_count += 1
+        print(f"{product}: {quantity} units × ${price:.2f} = ${total:.2f}")
+print(f"Total revenue: ${total_revenue:.2f}")
