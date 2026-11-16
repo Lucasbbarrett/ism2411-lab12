@@ -79,3 +79,22 @@ with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
         print(f"{product}: {quantity} units × ${price:.2f} = ${total:.2f}")
 print(f"DictReader total revenue: ${dict_total:.2f}")
 print("Totals match:", round(dict_total, 2) == round(total_revenue, 2))
+
+# Exercise 7: Add up repeated products and sort by name.
+summary = {}
+with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        product = row["product"]
+        total = round(float(row["price"]) * int(row["quantity"]), 2)
+        summary[product] = summary.get(product, 0) + total
+
+print("\nSales summary by product:")
+for product in sorted(summary):
+    print(f"{product}: ${summary[product]:.2f}")
+
+# Exercise 8: Keep the old log entries and add one for this run.
+timestamp = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %z")
+with open("data/run_log.txt", "a", encoding="utf-8") as log:
+    log.write(f"{timestamp} - Total revenue: ${total_revenue:.2f}\n")
+print("\nAdded this run to data/run_log.txt.")
