@@ -44,3 +44,38 @@ with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
         original_count += 1
         print(f"{product}: {quantity} units × ${price:.2f} = ${total:.2f}")
 print(f"Total revenue: ${total_revenue:.2f}")
+
+# Exercise 5: Write only orders over $100.
+written_count = 0
+with open("data/sales.csv", "r", newline="", encoding="utf-8") as source:
+    reader = csv.reader(source)
+    next(reader)
+    with open("data/cleaned.csv", "w", newline="", encoding="utf-8") as output:
+        writer = csv.writer(output)
+        writer.writerow(["Product", "Price", "Qty", "Total"])
+        for row in reader:
+            product = row[0]
+            price = float(row[1])
+            quantity = int(row[2])
+            total = round(price * quantity, 2)
+            if total > 100:
+                writer.writerow([product, f"{price:.2f}", quantity, f"{total:.2f}"])
+                written_count += 1
+print(f"\nWrote {written_count} of {original_count} original rows to data/cleaned.csv.")
+
+# Exercise 6: Read the columns by name.
+# I would use reader for a small file when I already know the column order.
+# I would use DictReader when named columns make the code easier to follow.
+print("\nDictReader totals:")
+dict_total = 0
+with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        product = row["product"]
+        price = float(row["price"])
+        quantity = int(row["quantity"])
+        total = round(price * quantity, 2)
+        dict_total += total
+        print(f"{product}: {quantity} units × ${price:.2f} = ${total:.2f}")
+print(f"DictReader total revenue: ${dict_total:.2f}")
+print("Totals match:", round(dict_total, 2) == round(total_revenue, 2))
